@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { calcPrice } from "@/utils/format.util";
 
 const { Title, Text } = Typography;
+
 export default function Product() {
   const [searchTerm, setSearchTerm] = useState("");
   const [cateId, setCateId] = useState(0);
@@ -26,6 +27,15 @@ export default function Product() {
   const filteredData = packages?.filter((packagee) =>
     packagee.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  const categoryImageMap: Record<number, string> = {
+    2: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREmzhCpIEw4ctmNJRJSZjoPmu2234mK_9V0w&s",
+    1: "https://digishop.vnpt.vn/digitalShop/images/production/1737606576027Chuan-100.jpg",
+    3: "https://digishop.vnpt.vn/digitalShop/images/production/1743251187165Mesh%202+%20copy_2-100.jpg",
+  };
+
+  const defaultImage =
+    "https://digishop.vnpt.vn/digitalShop/images/production/1743223180156Home%203-100.jpg";
 
   return (
     <Row gutter={[16, 16]}>
@@ -82,36 +92,43 @@ export default function Product() {
         </Button>
       </Col>
       {filteredData?.map((item) => (
-        <Col span={12}>
-          <Card bordered={false} style={{ height: "220px" }}>
-            <Flex gap={10}>
-              <img
-                alt="YOLO125V"
-                src="https://digishop.vnpt.vn/digitalShop/images/production/1743223180156Home%203-100.jpg"
-                className="min-h-[170px] "
-                width={200}
-              />
-              <Flex vertical gap={6}>
-                <Title level={4} style={{ color: "#ff2a68" }}>
-                  {item.name}
-                </Title>
-                <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
-                  {calcPrice(item.price, item.discount).toLocaleString(
-                    "vi-VN"
-                  ) + "đ/lượt"}
-                </Text>
-                {item.package_feature?.map((item) => (
-                  <p>
-                    - {item.name} {`(${item.value}).`}
-                  </p>
-                ))}
-                <Flex style={{ marginTop: "auto" }} gap={4}>
+        <Col span={12} key={item.id}>
+          <Card bordered={false} style={{ height: "auto" }}>
+            <Flex direction="column" gap={10} style={{ height: "100%" }}>
+              <Flex gap={10} style={{ flex: 1 }}>
+                <img
+                  alt={item.name}
+                  src={
+                    categoryImageMap[item.package_category.id] || defaultImage
+                  }
+                  className="min-h-[170px]"
+                  width={200}
+                />
+                <Flex vertical gap={6} style={{ flex: 1 }}>
+                  <Title level={4} style={{ color: "#ff2a68" }}>
+                    {item.name}
+                  </Title>
+                  <Text style={{ fontSize: "18px", fontWeight: "bold" }}>
+                    {calcPrice(item.price, item.discount).toLocaleString(
+                      "vi-VN"
+                    ) + "đ/lượt"}
+                  </Text>
+                  {item.package_feature?.map((feature, index) => (
+                    <p key={index}>
+                      - {feature.name} ({feature.value}).
+                    </p>
+                  ))}
                   <Button
                     type="primary"
-                    className="mt-auto"
                     icon={<ShoppingCartOutlined />}
                     block
                     onClick={() => navigate(`/product-detail/${item.id}`)}
+                    style={{
+                      width: "50%", // Giới hạn chiều rộng button là 50% chiều rộng thẻ
+                      marginTop: "auto", // Đảm bảo nút luôn ở dưới
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
                   >
                     Xem chi tiết
                   </Button>

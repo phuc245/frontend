@@ -20,7 +20,6 @@ export type UpdateUserRequestType = {
   last_name?: string;
   address?: string;
   phone_number?: string;
-  tax_code?: string;
 };
 
 export type UserType = {
@@ -32,5 +31,4 @@ export type UserType = {
   address: string;
   phone_number: string;
   role: string;
-  tax_code: string;
 };

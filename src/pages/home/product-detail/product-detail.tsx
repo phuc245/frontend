@@ -6,9 +6,19 @@ import { queryClient } from "@/query-client";
 import { CreateCartItemRequestType } from "@/types/cart-item/cart-item.type";
 import { calcPriceWithSubscriptionDuration } from "@/utils/format.util";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Button, Card, Carousel, Divider, Flex, message, Space } from "antd";
+import {
+  Button,
+  Card,
+  Carousel,
+  Divider,
+  Flex,
+  message,
+  Space,
+  Col,
+} from "antd";
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Slider from "react-slick";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -67,14 +77,27 @@ export default function ProductDetail() {
     );
   };
 
+  const categoryImageMap: Record<number, string> = {
+    2: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREmzhCpIEw4ctmNJRJSZjoPmu2234mK_9V0w&s",
+    1: "https://digishop.vnpt.vn/digitalShop/images/production/1737606576027Chuan-100.jpg",
+    3: "https://digishop.vnpt.vn/digitalShop/images/production/1743251187165Mesh%202+%20copy_2-100.jpg",
+  };
+
+  const defaultImage =
+    "https://digishop.vnpt.vn/digitalShop/images/production/1743223180156Home%203-100.jpg";
+
   return (
     <>
       <Space direction="vertical" size={16} style={{ width: "100%" }}>
         <Card style={{ padding: "24px" }}>
           <Flex gap={12}>
             <img
-              src="https://digishop.vnpt.vn/digitalShop/images/production/1743223180156Home%203-100.jpg"
-              alt=""
+              src={
+                categoryImageMap[packagee?.package_category.id ?? 0] ||
+                defaultImage
+              }
+              alt={packagee?.name}
+              width={200}
             />
             <Flex vertical gap={4} flex={1}>
               <span>{packagee?.name}</span>
@@ -163,71 +186,146 @@ export default function ProductDetail() {
               Thông tin chi tiết
             </span>
             <span>
-              1. Ưu đãi gói cước - Đường truyền Internet tốc độ từ 500 Mbps lên
-              tới 1000 Mbps tuỳ thuộc khoảng cách tới thiết bị phát Wifi, chủng
-              loại thiết bị và hạ tầng tại từng khu vực - Trang bị 01 Wifi Mesh
-              5 hoặc 01 Wifi Mesh 6 + Wifi Mesh 5: * Wifi Mesh 5 iGate EW12ST là
-              sự kết hợp giữa chuẩn Wifi 5 và công nghệ Mesh Wifi, phù hợp với
-              hộ gia đình với mọi cấu trúc nhà ở. * Tốc độ lên đến 1200Mbps trên
-              cả 2 băng tần 2,4-5GHz * Kết nối liền mạch, chỉ tạo tên 1 Wifi duy
-              nhất * Hỗ trợ đồng thời 40 thiết bị * Cài đặt dễ dàng, triển khai
-              linh hoạt. + Wifi Mesh 6: *Wifi Mesh 6 iGate EW30SX là sự kết hợp
-              giữa chuẩn Wifi 6 và công nghệ Mesh, phù hợp với các doanh nghiệp,
-              tổ chức vừa và nhỏ, các gia đình có nhu cầu sử dụng internet cao.
-              * Tốc độ lên đến 3Gbps, trên cả hai băng tần 2,4 – 5GHz * Kết nối
-              liền mạch, phù hợp mọi ngóc ngách * Hỗ trợ đồng thời 100 thiết bị
-              * Độ trễ giảm 50%. - Lắp đặt nhanh chóng, chăm sóc và hỗ trợ khách
-              hàng 24/7 2. Cước đấu nối hòa mạng - Cước đấu nối hòa mạng áp dụng
-              cho thuê bao đăng ký mới dịch vụ cho Khách hàng cá nhân, Hộ gia
-              đình: 300.000 VNĐ/thuê bao (đã bao gồm VAT) 3. Khu vực áp dụng -
-              Áp dụng tại ngoại thành Hà Nội, TP.HCM & 61 Tỉnh/thành phố 4. Tổng
-              đài hỗ trợ - Để được hỗ trợ về dịch vụ internet và truyền hình,
-              Quý khách vui lòng liên hệ 1800 1166 (miễn phí)
+              <div>
+                <p>
+                  <strong>1. Ưu đãi gói cước</strong>
+                </p>
+                <ul style={{ paddingLeft: 20 }}>
+                  <li>Đường truyền Internet tốc độ 300 Mbps</li>
+                  <li>
+                    Trang bị miễn phí thiết bị ONT 2 băng tần trong suốt thời
+                    gian sử dụng
+                  </li>
+                  <li>
+                    Lắp đặt nhanh chóng, chăm sóc và hỗ trợ khách hàng 24/7
+                  </li>
+                </ul>
+
+                <p>
+                  <strong>2. Cước đấu nối hòa mạng</strong>
+                </p>
+                <ul style={{ paddingLeft: 20 }}>
+                  <li>
+                    Cước đấu nối hòa mạng áp dụng cho thuê bao đăng ký mới dịch
+                    vụ cho Khách hàng cá nhân, Hộ gia đình: 300.000 VNĐ/thuê bao
+                    (đã bao gồm VAT)
+                  </li>
+                </ul>
+
+                <p>
+                  <strong>3. Khu vực áp dụng</strong>
+                </p>
+                <ul style={{ paddingLeft: 20 }}>
+                  <li>Áp dụng tại nội thành Hà Nội, TP. HCM</li>
+                </ul>
+
+                <p>
+                  <strong>4. Tổng đài hỗ trợ</strong>
+                </p>
+                <ul style={{ paddingLeft: 20 }}>
+                  <li>
+                    Để được hỗ trợ về dịch vụ internet và truyền hình, Quý khách
+                    vui lòng liên hệ
+                    <strong> 1800 1166</strong> (miễn phí)
+                  </li>
+                </ul>
+              </div>
             </span>
           </Flex>
         </Card>
-        <Flex vertical>
-          <span className="text-2xl font-semibold text-sky-500">
-            Gói cước khác
-          </span>
-          <Carousel arrows infinite={false} slidesToShow={4} draggable>
-            {listPackages?.map((item) => (
-              <Card
-                key={item.id}
-                style={{
-                  padding: "0 10px",
-                }}
-              >
-                <Flex vertical align="center">
-                  <span className="text-xl font-semibold text-sky-600">
-                    {item.name}
-                  </span>
-                  <Divider />
-                  <Flex align="center" gap={6} style={{ minHeight: "100px" }}>
-                    <p>-</p>
-                    {item.package_feature.map((item) => (
-                      <Fragment key={item.id}>
-                        <span className="font-bold">{item.name}</span>
-                        <span>{item.value}</span>
-                      </Fragment>
-                    ))}
-                  </Flex>
-                  <Divider />
-                  <span className="text-lg ">
-                    {Number(item.price).toLocaleString("vi-VN") + " đ/lượt"}
-                  </span>
-                  <Button
-                    type="primary"
-                    size="middle"
-                    onClick={() => navigate(`/product-detail/${item.id}`)}
-                  >
-                    Xem chi tiết
-                  </Button>
-                </Flex>
-              </Card>
-            ))}
-          </Carousel>
-        </Flex>
+        <Col span={24} style={{ marginTop: 32 }}>
+          <Flex vertical>
+            <span className="text-2xl font-semibold text-sky-500">
+              Gói cước khác
+            </span>
+            <Slider
+              dots={false}
+              infinite={false}
+              speed={500}
+              slidesToShow={4}
+              slidesToScroll={1}
+              autoplay={false}
+              swipeToSlide
+              responsive={[
+                { breakpoint: 1024, settings: { slidesToShow: 3 } },
+                { breakpoint: 768, settings: { slidesToShow: 2 } },
+                { breakpoint: 480, settings: { slidesToShow: 1 } },
+              ]}
+            >
+              {listPackages
+                ?.filter((pkg) => pkg.id !== Number(id))
+                .map((item) => (
+                  <div key={item.id}>
+                    <Card
+                      style={{ margin: "0 10px", height: "100%" }}
+                      hoverable
+                    >
+                      <Flex
+                        vertical
+                        align="center"
+                        justify="space-between"
+                        style={{ height: "100%" }}
+                      >
+                        <img
+                          alt={item.name}
+                          src={
+                            categoryImageMap[item.package_category.id] ||
+                            defaultImage
+                          }
+                          style={{
+                            objectFit: "cover",
+                            height: 160,
+                            width: "100%",
+                            borderRadius: 8,
+                            marginBottom: 10,
+                          }}
+                        />
+
+                        <span className="text-xl font-semibold text-center">
+                          {item.name}
+                        </span>
+
+                        <Divider />
+
+                        <Flex
+                          align="center"
+                          gap={6}
+                          style={{ minHeight: "100px" }}
+                        >
+                          <p>-</p>
+                          <Flex vertical>
+                            {item.package_feature?.map((f) => (
+                              <Fragment key={f.id}>
+                                <span className="font-bold">{f.name}</span>
+                                <span>{f.value}</span>
+                              </Fragment>
+                            ))}
+                          </Flex>
+                        </Flex>
+
+                        <Divider />
+
+                        <span className="text-lg">
+                          {Number(item.price).toLocaleString("vi-VN")} đ/lượt
+                        </span>
+
+                        <Button
+                          type="primary"
+                          size="middle"
+                          onClick={() => {
+                            navigate(`/product-detail/${item.id}`);
+                            window.scrollTo({ top: 0, behavior: "smooth" });
+                          }}
+                        >
+                          Xem chi tiết
+                        </Button>
+                      </Flex>
+                    </Card>
+                  </div>
+                ))}
+            </Slider>
+          </Flex>
+        </Col>
       </Space>
     </>
   );

@@ -46,7 +46,6 @@ export default function Info() {
         email: me.email,
         phone_number: me.phone_number,
         address: me.address,
-        tax_code: me.tax_code,
       });
     }
   }, [me]);
@@ -79,11 +78,6 @@ export default function Info() {
         <Col span={12}>
           <Form.Item label="Số điện thoại" name="phone_number">
             <Input placeholder="Số điện thoại" />
-          </Form.Item>
-        </Col>
-        <Col span={24}>
-          <Form.Item label="Mã số thuế" name="tax_code">
-            <Input placeholder="Mã số thuế" />
           </Form.Item>
         </Col>
         <Col span={24}>

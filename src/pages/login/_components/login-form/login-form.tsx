@@ -58,6 +58,16 @@ export default function LoginForm() {
         >
           <Input.Password prefix={<LockOutlined />} size="large" />
         </Form.Item>
+        <Form.Item noStyle>
+          <div className="text-right mb-4">
+            <a
+              href="/forgot-password"
+              className="text-blue-500 hover:underline transition duration-200 font-medium"
+            >
+              Quên mật khẩu?
+            </a>
+          </div>
+        </Form.Item>
         <Form.Item label={null}>
           <Button type="primary" htmlType="submit" className="w-full">
             Đăng nhập

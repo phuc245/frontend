@@ -1,4 +1,4 @@
-import { Card, Col, Flex, Row, Tabs, TabsProps } from "antd";
+import { Card, Col, Flex, Row, Tabs, TabsProps, Button } from "antd";
 import {
   ArrowLeftOutlined,
   MobileOutlined,
@@ -10,12 +10,15 @@ import { TANSTACK_KEY } from "@/config/tanstack-key.config";
 import { userApi } from "@/api/user/user.api";
 import OrderHistory from "@/pages/home/profile/_components/order-history";
 import SubscriptionHistory from "@/pages/home/profile/_components/subscription-history";
+import { useNavigate } from "react-router-dom"; // ✅ Thêm dòng này
 
 export default function Profile() {
+  const navigate = useNavigate(); // ✅ Khởi tạo navigate
   const { data: me } = useQuery({
     queryKey: [TANSTACK_KEY.ME],
     queryFn: () => userApi.getMe(),
   });
+
   const onChange = (key: string) => {
     console.log(key);
   };
@@ -37,12 +40,18 @@ export default function Profile() {
       children: <SubscriptionHistory />,
     },
   ];
+
   return (
     <Row gutter={[16, 16]}>
       <Col span={24}>
-        <span className="text-stone-800 font-semibold text-lg">
-          <ArrowLeftOutlined style={{ fontSize: "16px" }} /> Quay lại trang chủ
-        </span>
+        <Button
+          type="default"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => navigate("/")}
+          style={{ marginBottom: 12 }}
+        >
+          Quay lại trang chủ
+        </Button>
       </Col>
       <Col span={6}>
         <Card>

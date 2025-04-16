@@ -95,11 +95,19 @@ export default function HomeLayout() {
     {
       key: "profile",
       label: (
-        <Link to="/profile">
+        <span
+          onClick={() => {
+            navigate("/profile");
+            setTimeout(() => {
+              window.location.reload();
+            }, 5); // delay 10ms để đảm bảo navigate xong mới reload
+          }}
+        >
           <UserOutlined style={{ fontSize: "12px" }} /> Profile
-        </Link>
+        </span>
       ),
     },
+
     {
       label: (
         <span className="text-red-400" onClick={handleLogout}>
